@@ -1,0 +1,73 @@
+Script started on 2025-07-09 19:44:55+03:00 [TERM="xterm-256color" TTY="/dev/pts/2" COLUMNS="101" LINES="24"]
+[?2004h]0;vboxuser@ubuntu: ~/codeby-devops/lesson4[01;32mvboxuser@ubuntu[00m:[01;34m~/codeby-devops/lesson4[00m$ [7msudo apt install -y nginx[27msudo apt install -y nginx
+[?2004l[sudo] пароль для vboxuser: 
+Чтение списков пакетов… 0%Чтение списков пакетов… 100%Чтение списков пакетов… Готово
+Построение дерева зависимостей… 0%Построение дерева зависимостей… 0%Построение дерева зависимостей… 50%Построение дерева зависимостей… 50%Построение дерева зависимостей… Готово
+Чтение информации о состоянии… 0%             Чтение информации о состоянии… 0%Чтение информации о состоянии… Готово
+Будут установлены следующие дополнительные пакеты:
+  nginx-common
+Предлагаемые пакеты:
+  fcgiwrap nginx-doc
+Следующие НОВЫЕ пакеты будут установлены:
+  nginx nginx-common
+Обновлено 0 пакетов, установлено 2 новых пакетов, для удаления отмечено 0 пакетов, и 140 пакетов не обновлено.
+Необходимо скачать 564 kB архивов.
+После данной операции объём занятого дискового пространства возрастёт на 1 596 kB.
+[33m0% [Обработка][0m                       Пол:1 http://ru.archive.ubuntu.com/ubuntu noble-updates/main amd64 nginx-common all 1.24.0-2ubuntu7.4 [43,4 kB]
+[33m0% [1 nginx-common 903 B/43,4 kB 2%][0m[33m16% [Ожидание заголовков][0m                                           Пол:2 http://ru.archive.ubuntu.com/ubuntu noble-updates/main amd64 nginx amd64 1.24.0-2ubuntu7.4 [521 kB]
+[33m                                           16% [2 nginx 901 B/521 kB 0%][0m[33m                             100% [Обработка][0m                         Получено 564 kB за 0с (1 414 kB/s)
+Предварительная настройка пакетов …
+
+7[0;23r8[1AВыбор ранее не выбранного пакета nginx-common.
+(Чтение базы данных … (Чтение базы данных … 5%(Чтение базы данных … 10%(Чтение базы данных … 15%(Чтение базы данных … 20%(Чтение базы данных … 25%(Чтение базы данных … 30%(Чтение базы данных … 35%(Чтение базы данных … 40%(Чтение базы данных … 45%(Чтение базы данных … 50%(Чтение базы данных … 55%(Чтение базы данных … 60%(Чтение базы данных … 65%(Чтение базы данных … 70%(Чтение базы данных … 75%(Чтение базы данных … 80%(Чтение базы данных … 85%(Чтение базы данных … 90%(Чтение базы данных … 95%(Чтение базы данных … 100%(Чтение базы данных … на данный момент установлено 204815 файлов и каталогов.)
+Подготовка к распаковке …/nginx-common_1.24.0-2ubuntu7.4_all.deb …
+7[24;0f[42m[30mХод выполнения: [  0%][49m[39m [.........................................................................] 87[24;0f[42m[30mХод выполнения: [ 11%][49m[39m [########.................................................................] 8Распаковывается nginx-common (1.24.0-2ubuntu7.4) …
+7[24;0f[42m[30mХод выполнения: [ 22%][49m[39m [################.........................................................] 8Выбор ранее не выбранного пакета nginx.
+Подготовка к распаковке …/nginx_1.24.0-2ubuntu7.4_amd64.deb …7[24;0f[42m[30mХод выполнения: [ 33%][49m[39m [########################.................................................] 8
+Распаковывается nginx (1.24.0-2ubuntu7.4) …
+7[24;0f[42m[30mХод выполнения: [ 44%][49m[39m [################################.........................................] 8Настраивается пакет nginx-common (1.24.0-2ubuntu7.4) …
+7[24;0f[42m[30mХод выполнения: [ 56%][49m[39m [########################################.................................] 8Created symlink /etc/systemd/system/multi-user.target.wants/nginx.service → /usr/lib/systemd/system/nginx.service.
+7[24;0f[42m[30mХод выполнения: [ 67%][49m[39m [################################################.........................] 8Настраивается пакет nginx (1.24.0-2ubuntu7.4) …
+7[24;0f[42m[30mХод выполнения: [ 78%][49m[39m [########################################################.................] 8 * Upgrading binary nginx       [101G [95G[ OK ]
+7[24;0f[42m[30mХод выполнения: [ 89%][49m[39m [################################################################.........] 8Обрабатываются триггеры для man-db (2.12.0-4build2) …
+Обрабатываются триггеры для ufw (0.36.2-6) …
+
+7[0;24r8[1A[J[?2004h]0;vboxuser@ubuntu: ~/codeby-devops/lesson4[01;32mvboxuser@ubuntu[00m:[01;34m~/codeby-devops/lesson4[00m$ [7msudo systemctl stop nginx[27msudo systemctl stop nginx
+[?2004l[?2004h]0;vboxuser@ubuntu: ~/codeby-devops/lesson4[01;32mvboxuser@ubuntu[00m:[01;34m~/codeby-devops/lesson4[00m$ [7msudo systemctl disable nginx[27msudo systemctl disable nginx
+[?2004lSynchronizing state of nginx.service with SysV service script with /usr/lib/systemd/systemd-sysv-install.
+Executing: /usr/lib/systemd/systemd-sysv-install disable nginx
+Removed "/etc/systemd/system/multi-user.target.wants/nginx.service".
+[?2004h]0;vboxuser@ubuntu: ~/codeby-devops/lesson4[01;32mvboxuser@ubuntu[00m:[01;34m~/codeby-devops/lesson4[00m$ [7msudo nano /etc/systemd/system/custom-nginx.service[27m[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Csudo nano /etc/systemd/system/custom-nginx.service
+[?2004l[?2004h[?1049h[22;0;0t[1;24r(B[m[4l[?7h[39;49m[?1h=[?1h=[?25l[39;49m(B[m[H[2J[22;46H(B[0;7m[ Чтение… ](B[m[22;40H(B[0;7m[ Прочитано 17 строк ](B[m[H(B[0;7m  GNU nano 7.2                   /etc/systemd/system/custom-nginx.service                            [1;100H(B[m[23d(B[0;7m^G(B[m Справка    (B[0;7m^O(B[m Записать   (B[0;7m^W(B[m Поиск[43G(B[0;7m^K(B[m Вырезать   (B[0;7m^T(B[m Выполнить  (B[0;7m^C(B[m Позиция    (B[0;7mM-U(B[m Отмена[24d(B[0;7m^X(B[m Выход[15G(B[0;7m^R(B[m ЧитФайл    (B[0;7m^\(B[m Замена     (B[0;7m^U(B[m Вставить   (B[0;7m^J(B[m Выровнять  (B[0;7m^/(B[m К строке   (B[0;7mM-E(B[m Повтор[2d(B[0;1m[32m[Unit][3d[39m(B[mDescription=Custom Nginx Service[4dAfter=network.target[6d(B[0;1m[32m[Service][7d[39m(B[mType=forking[8dPIDFile=/run/nginx.pid[9dExecStartPre=/usr/sbin/nginx -t[10dExecStart=/usr/sbin/nginx[11dExecReload=/usr/sbin/nginx -s reload[12dExecStop=/usr/sbin/nginx -s quit[13dPrivateTmp=true[14dRestart=on-failure[15dRestartSec=5s[17d(B[0;1m[32m[Install][18d[39m(B[mWantedBy=multi-user.target[2d[?12l[?25h[?25l[23;15H           (B[0;7mM-D(B[m Формат DOS           (B[0;7mM-A(B[m Доп. в начало        (B[0;7mM-B(B[m Резерв. копия[K[24;2H(B[0;7mC(B[m Отмена[16X[24;26H(B[0;7mM-M(B[m Формат Mac           (B[0;7mM-P(B[m Доп. в конец         (B[0;7m^T(B[m Обзор[K[22d(B[0;7mИмя файла для записи: /etc/systemd/system/custom-nginx.service                                       [22;63H(B[m[?12l[?25h[?25l[22;45H[1K (B[0;7m[ Запись… ](B[m[K[1;100H[22;41H(B[0;7m[ Записано 17 строк ](B[m[23;15H(B[0;7m^O(B[m Записать   (B[0;7m^W(B[m Поиск      (B[0;7m^K(B[m Вырезать   (B[0;7m^T(B[m Выполнить  (B[0;7m^C(B[m Позиция    (B[0;7mM-U(B[m Отмена[24;2H(B[0;7mX(B[m Выход      (B[0;7m^R(B[m ЧитФайл    (B[0;7m^\(B[m Замена     (B[0;7m^U(B[m Вставить   (B[0;7m^J(B[m Выровнять  (B[0;7m^/(B[m К строке   (B[0;7mM-E(B[m Повтор[?12l[?25h[2d[?25l[22d[J[24d[?12l[?25h[24;1H[?1049l[23;0;0t[?1l>[?2004l[?2004h]0;vboxuser@ubuntu: ~/codeby-devops/lesson4[01;32mvboxuser@ubuntu[00m:[01;34m~/codeby-devops/lesson4[00m$ [7msudo systemctl daemon-reload[27msudo systemctl daemon-reload
+[?2004l[?2004h]0;vboxuser@ubuntu: ~/codeby-devops/lesson4[01;32mvboxuser@ubuntu[00m:[01;34m~/codeby-devops/lesson4[00m$ [7msudo systemctl enable custom-nginx[27msudo systemctl enable custom-nginx
+[?2004l[?2004h]0;vboxuser@ubuntu: ~/codeby-devops/lesson4[01;32mvboxuser@ubuntu[00m:[01;34m~/codeby-devops/lesson4[00m$ [7msudo systemctl start custom-nginx[27msudo systemctl start custom-nginx
+[?2004l[?2004h]0;vboxuser@ubuntu: ~/codeby-devops/lesson4[01;32mvboxuser@ubuntu[00m:[01;34m~/codeby-devops/lesson4[00m$ [7msudo systemctl status custom-nginx[27msudo systemctl status custom-nginx
+[?2004l[?1h=[0;1;32m●[0m custom-nginx.service - Custom Nginx Service[m
+     Loaded: loaded (]8;;file://ubuntu/etc/systemd/system/custom-nginx.service/etc/systemd/system/custom-nginx.service]8;;; [0;1;32menabled[0m; preset: [0;1;32menabled[0m)[m
+     Active: [0;1;32mactive (running)[0m since Wed 2025-07-09 19:49:06 +03; 4min 25s ago[m
+   Main PID: 8513 (nginx)[m
+      Tasks: 7 (limit: 34426)[m
+     Memory: 5.1M (peak: 5.9M)[m
+        CPU: 33ms[m
+     CGroup: /system.slice/custom-nginx.service[m
+             ├─[0;38;5;245m8513 "nginx: master process /usr/sbin/nginx"[0m[m
+             ├─[0;38;5;245m8514 "nginx: worker process"[0m[m
+             ├─[0;38;5;245m8515 "nginx: worker process"[0m[m
+             ├─[0;38;5;245m8516 "nginx: worker process"[0m[m
+             ├─[0;38;5;245m8517 "nginx: worker process"[0m[m
+             ├─[0;38;5;245m8518 "nginx: worker process"[0m[m
+             └─[0;38;5;245m8519 "nginx: worker process"[0m[m
+[m
+июл 09 19:49:06 ubuntu systemd[1]: Starting custom-nginx.service - Custom Nginx Service...[m
+июл 09 19:49:06 ubuntu nginx[8510]: nginx: the configuration file /etc/nginx/nginx.conf syntax is ok[m
+июл 09 19:49:06 ubuntu nginx[8510]: nginx: configuration file /etc/nginx/nginx.conf test is successf[m[7m>[27m
+июл 09 19:49:06 ubuntu systemd[1]: Started custom-nginx.service - Custom Nginx Service.[m
+[7mlines 1-20/20 (END)[27m[K[K[K[7mlines 1-20/20 (END)[27m[K[K[K[7mlines 1-20/20 (END)[27m[K
+[1]+  Остановлен    sudo systemctl status custom-nginx
+[?2004h]0;vboxuser@ubuntu: ~/codeby-devops/lesson4[01;32mvboxuser@ubuntu[00m:[01;34m~/codeby-devops/lesson4[00m$ [7mcurl -I 127.0.0.1[27mcurl -I 127.0.0.1
+[?2004lHTTP/1.1 200 OK
+[1mServer[0m: nginx/1.24.0 (Ubuntu)
+[1mDate[0m: Wed, 09 Jul 2025 16:54:17 GMT
+[1mContent-Type[0m: text/html
+[1mContent-Length[0m: 615
+[1mLast-Mo
