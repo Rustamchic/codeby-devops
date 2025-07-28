@@ -1,0 +1,31 @@
+Script started on 2025-07-23 18:48:26+03:00 [TERM="xterm-256color" TTY="/dev/pts/0" COLUMNS="-1" LINES="-1"]
+[?2004h]0;vboxuser@server: ~/codeby-devops/lesson6[01;32mvboxuser@server[00m:[01;34m~/codeby-devops/lesson6[00m$ lxd --version
+[?2004l5.21.3 LTS
+[?2004h]0;vboxuser@server: ~/codeby-devops/lesson6[01;32mvboxuser@server[00m:[01;34m~/codeby-devops/lesson6[00m$ lxc list
+[?2004l+----------------------+---------+------------------+---------------------------------+-----------+-----------+
+|         NAME         |  STATE  |       IPV4       |              IPV6               |   TYPE    | SNAPSHOTS |
++----------------------+---------+------------------+---------------------------------+-----------+-----------+
+| rus-apache-container | RUNNING | 10.0.2.16 (eth0) | fd00::216:3eff:fea7:ec46 (eth0) | CONTAINER | 0         |
++----------------------+---------+------------------+---------------------------------+-----------+-----------+
+[?2004h]0;vboxuser@server: ~/codeby-devops/lesson6[01;32mvboxuser@server[00m:[01;34m~/codeby-devops/lesson6[00m$ lxc listd --versionsudo apt-get install iptableshostnamectl set-hostname serverls[Kcd lesson5codeby-devops/[7Plesson5ls[Ksudo hostnamectl set-hostname server[7Papt-get install iptables[16Plxd --version[5Pc list[K[7mlxc exec rus-apache-container -- ping -c 3 8.8.8.8[27m[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Clxc exec rus-apache-container -- ping -c 3 8.8.8.8
+[?2004lPING 8.8.8.8 (8.8.8.8) 56(84) bytes of data.
+64 bytes from 8.8.8.8: icmp_seq=1 ttl=255 time=19.2 ms
+64 bytes from 8.8.8.8: icmp_seq=2 ttl=255 time=21.5 ms
+^Z64 bytes from 8.8.8.8: icmp_seq=3 ttl=255 time=19.4 ms
+
+--- 8.8.8.8 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2402ms
+rtt min/avg/max/mdev = 19.167/20.003/21.493/1.055 ms
+[?2004h]0;vboxuser@server: ~/codeby-devops/lesson6[01;32mvboxuser@server[00m:[01;34m~/codeby-devops/lesson6[00m$ [7mlxc config device show rus-apache-container[27m[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Clxc config device show rus-apache-container
+[?2004lenp0s3:
+  nictype: macvlan
+  parent: enp0s3
+  type: nic
+http:
+  connect: tcp:127.0.0.1:80
+  listen: tcp:0.0.0.0:8080
+  type: proxy
+[?2004h]0;vboxuser@server: ~/codeby-devops/lesson6[01;32mvboxuser@server[00m:[01;34m~/codeby-devops/lesson6[00m$ exit
+[?2004lexit
+
+Script done on 2025-07-23 18:51:24+03:00 [COMMAND_EXIT_CODE="0"]
