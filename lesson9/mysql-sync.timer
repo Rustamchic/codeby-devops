@@ -1,0 +1,10 @@
+[Unit]
+Description=Hourly sync MySQL backups to store
+
+[Timer]
+OnCalendar=hourly
+Persistent=true
+Unit=mysql-sync.service
+
+[Install]
+WantedBy=timers.target

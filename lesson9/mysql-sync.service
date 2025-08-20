@@ -1,0 +1,9 @@
+[Unit]
+Description=Sync MySQL backups to store via rsync
+After=network-online.target mysql-backup.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=root
+ExecStart=/usr/bin/rsync -av --delete --password-file=/etc/rsync.pass /opt/mysql_backup/ backup@10.0.0.20::mysql_store/
