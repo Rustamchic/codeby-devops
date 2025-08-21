@@ -1,0 +1,8 @@
+[Unit]
+Description=MySQL backup to /opt/mysql_backup
+
+[Service]
+Type=oneshot
+User=backupuser
+Group=backupuser
+ExecStart=/usr/local/bin/backup-mysql.sh

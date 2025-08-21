@@ -1,0 +1,10 @@
+[Unit]
+Description=Run MySQL backup hourly
+
+[Timer]
+OnCalendar=hourly
+Persistent=true
+Unit=mysql-backup.service
+
+[Install]
+WantedBy=timers.target
