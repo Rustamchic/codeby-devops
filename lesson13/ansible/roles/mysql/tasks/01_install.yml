@@ -1,0 +1,15 @@
+---
+- name: Install MySQL/MariaDB packages
+  ansible.builtin.package:
+    name: "{{ mysql_packages }}"
+    state: present
+  register: pkg
+  until: pkg is succeeded
+  retries: 3
+  delay: 5
+
+- name: Ensure MySQL is enabled and running
+  ansible.builtin.service:
+    name: "{{ mysql_service_name }}"
+    enabled: true
+    state: started

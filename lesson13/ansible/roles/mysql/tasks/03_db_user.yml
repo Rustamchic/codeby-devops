@@ -1,0 +1,28 @@
+---
+- name: Ensure MySQL root password
+  community.mysql.mysql_user:
+    name: root
+    host_all: true
+    password: "{{ mysql_root_password }}"
+    login_unix_socket: "{{ mysql_socket }}"
+    check_implicit_admin: true
+    state: present
+
+- name: Create WordPress database
+  community.mysql.mysql_db:
+    name: "{{ mysql_wp_db_name }}"
+    state: present
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+    login_unix_socket: "{{ mysql_socket }}"
+
+- name: Create WordPress user and grant privileges
+  community.mysql.mysql_user:
+    name: "{{ mysql_wp_user }}"
+    password: "{{ mysql_wp_password }}"
+    priv: "{{ mysql_wp_db_name }}.*:ALL"
+    host: "localhost"
+    state: present
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+    login_unix_socket: "{{ mysql_socket }}"

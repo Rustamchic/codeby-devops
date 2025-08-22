@@ -1,0 +1,14 @@
+---
+apache_pkg:
+  - httpd
+  - php
+  - php-mysqlnd
+  - php-gd
+  - php-xml
+  - php-cli
+  - php-curl
+apache_service: "httpd"
+apache_user: "apache"
+apache_group: "apache"
+vhost_dir: "/etc/httpd/conf.d"
+vhost_enabled_dir: "/etc/httpd/conf.d"

@@ -1,0 +1,8 @@
+---
+env_name: prod
+mysql_root_password: "ChangeMeRoot!"
+mysql_wp_db_name: "wordpress"
+mysql_wp_user: "wpuser"
+mysql_wp_password: "ChangeMeWP!"
+wp_domain: "prod.example.local"
+wp_site_dir: "/var/www/wordpress"

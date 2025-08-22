@@ -1,0 +1,7 @@
+.vagrant/
+*.retry
+*.log
+.ssh/
+*.key
+*.pem
+pycache/

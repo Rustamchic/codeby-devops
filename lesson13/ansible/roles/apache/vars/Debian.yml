@@ -1,0 +1,14 @@
+---
+apache_pkg:
+  - apache2
+  - libapache2-mod-php
+  - php
+  - php-mysql
+  - php-gd
+  - php-xml
+  - php-curl
+apache_service: "apache2"
+apache_user: "www-data"
+apache_group: "www-data"
+vhost_dir: "/etc/apache2/sites-available"
+vhost_enabled_dir: "/etc/apache2/sites-enabled"
