@@ -1,0 +1,43 @@
+Vagrant.configure("2") do |config|
+  config.vm.box = "ubuntu/jammy64"
+  config.ssh.insert_key = false   # оставим дефолтный ключ vagrant, добавим свой
+
+  # Общая функция: добавить наш публичный ключ в authorized_keys
+  add_pubkey = <<-SHELL
+    set -e
+    PUB="/vagrant/.ssh/id_ed25519_ansible.pub"
+    if [ -f "$PUB" ]; then
+      install -d -m 700 /home/vagrant/.ssh
+      touch /home/vagrant/.ssh/authorized_keys
+      chmod 600 /home/vagrant/.ssh/authorized_keys
+      if ! grep -q -F "$(cat "$PUB")" /home/vagrant/.ssh/authorized_keys; then
+        cat "$PUB" >> /home/vagrant/.ssh/authorized_keys
+      fi
+      chown -R vagrant:vagrant /home/vagrant/.ssh
+    else
+      echo "WARNING: $PUB not found. Generate it first."
+    fi
+  SHELL
+
+  config.vm.define "dev" do |dev|
+    dev.vm.hostname = "dev"
+    dev.vm.network "private_network", ip: "192.168.56.10"
+    dev.vm.provider "virtualbox" do |vb|
+      vb.name = "lesson12-dev"
+      vb.memory = 1024
+      vb.cpus = 1
+    end
+    dev.vm.provision "shell", inline: add_pubkey
+  end
+
+  config.vm.define "prod" do |prod|
+    prod.vm.hostname = "prod"
+    prod.vm.network "private_network", ip: "192.168.56.11"
+    prod.vm.provider "virtualbox" do |vb|
+      vb.name = "lesson12-prod"
+      vb.memory = 1024
+      vb.cpus = 1
+    end
+    prod.vm.provision "shell", inline: add_pubkey
+  end
+end

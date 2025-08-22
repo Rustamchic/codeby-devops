@@ -1,0 +1,30 @@
+---
+- name: Base setup + Nginx
+  hosts: all
+  become: true
+  vars:
+    common_packages:
+      - wget
+      - htop
+      - nginx
+
+  tasks:
+    - name: Apt | update cache
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 3600
+
+    - name: Apt | install common packages
+      ansible.builtin.apt:
+        name: "{{ common_packages }}"
+        state: present
+
+    - name: Service | ensure nginx is enabled and running
+      ansible.builtin.service:
+        name: nginx
+        enabled: true
+        state: started
+
+    - name: Debug | show environment
+      ansible.builtin.debug:
+        msg: "This host is in {{ env_name }} environment"
