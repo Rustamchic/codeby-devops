@@ -1,0 +1,3 @@
+---
+wp_domain: "example.local"
+wp_site_dir: "/var/www/wordpress"
