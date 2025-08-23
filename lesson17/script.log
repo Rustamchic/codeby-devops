@@ -1,0 +1,118 @@
+Script started on 2025-08-23 19:17:08+03:00 [TERM="xterm-256color" TTY="/dev/pts/0" COLUMNS="90" LINES="24"]
+[?2004h]0;vboxuser@server: ~/codeby-devops/lesson17[01;32mvboxuser@server[00m:[01;34m~/codeby-devops/lesson17[00m$ [7mdocker --version[27mdocker --version
+[?2004lDocker version 28.3.3, build 980b856
+[?2004h]0;vboxuser@server: ~/codeby-devops/lesson17[01;32mvboxuser@server[00m:[01;34m~/codeby-devops/lesson17[00m$ [7mdocker network create --driver bridge wp-net[27m[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cdocker network create --driver bridge wp-net
+[?2004lpermission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock: Head "http://%2Fvar%2Frun%2Fdocker.sock/_ping": dial unix /var/run/docker.sock: connect: permission denied
+[?2004h]0;vboxuser@server: ~/codeby-devops/lesson17[01;32mvboxuser@server[00m:[01;34m~/codeby-devops/lesson17[00m$ docker network create --driver bridge wp-net[1@s[1@i[1P[1@u[C[1@dodocker network create --driver bridge wp-net [A]0;vboxuser@server: ~/codeby-devops/lesson17[01;32mvboxuser@server[00m:[01;34m~/codeby-devops/lesson17[00m$ [C[C[C[C docker network create --driver bridge wp-net[A]0;vboxuser@server: ~/codeby-devops/lesson17[01;32mvboxuser@server[00m:[01;34m~/codeby-devops/lesson17[00m$ [C[C[C[C[C
+
+[?2004l[sudo] пароль для vboxuser: 
+940074108b0bacb7fb81f1dc710ff063d0c9956cf0b99d313b8f885aea2bb676
+[?2004h]0;vboxuser@server: ~/codeby-devops/lesson17[01;32mvboxuser@server[00m:[01;34m~/codeby-devops/lesson17[00m$ [7mdocker network ls[27mdocker network ls[1@s[1@u[C[1@d[1@o[1@ 
+[?2004lNETWORK ID     NAME      DRIVER    SCOPE
+39038764acd8   bridge    bridge    local
+7697df13a032   host      host      local
+d6baf03c50cf   none      null      local
+940074108b0b   wp-net    bridge    local
+[?2004h]0;vboxuser@server: ~/codeby-devops/lesson17[01;32mvboxuser@server[00m:[01;34m~/codeby-devops/lesson17[00m$ sudo [7mdocker volume create wp-db[27mdocker volume create wp-db
+[?2004lwp-db
+[?2004h]0;vboxuser@server: ~/codeby-devops/lesson17[01;32mvboxuser@server[00m:[01;34m~/codeby-devops/lesson17[00m$ sudo [7mdocker volume create wp-data[27mdocker volume create wp-data
+[?2004lwp-data
+[?2004h]0;vboxuser@server: ~/codeby-devops/lesson17[01;32mvboxuser@server[00m:[01;34m~/codeby-devops/lesson17[00m$ sudo [7mdocker volume ls[27mdocker volume ls
+[?2004lDRIVER    VOLUME NAME
+local     wp-data
+local     wp-db
+[?2004h]0;vboxuser@server: ~/codeby-devops/lesson17[01;32mvboxuser@server[00m:[01;34m~/codeby-devops/lesson17[00m$ sudo [7mdocker run -d --name wp-db \[27m
+[7m  --network wp-net \[27m
+[7m  -e MYSQL_DATABASE=wordpress \[27m
+[7m  -e MYSQL_USER=wpuser \[27m
+[7m  -e MYSQL_PASSWORD=wppass \[27m
+[7m  -e MYSQL_ROOT_PASSWORD=rootpass \[27m
+[7m  -v wp-db:/var/lib/mysql \[27m
+[7m  mysql:8.0 --default-authentication-plugin=mysql_native_password[27m[A[A[A[A[A[A[Adocker run -d --name wp-db \
+  --network wp-net \
+  -e MYSQL_DATABASE=wordpress \
+  -e MYSQL_USER=wpuser \
+  -e MYSQL_PASSWORD=wppass \
+  -e MYSQL_ROOT_PASSWORD=rootpass \
+  -v wp-db:/var/lib/mysql \
+  mysql:8.0 --default-authentication-plugin=mysql_native_password
+[?2004l8953fe697417599be03ce101fb53e0e2cb722af1e82c3aee763fb5863f693202
+[?2004h]0;vboxuser@server: ~/codeby-devops/lesson17[01;32mvboxuser@server[00m:[01;34m~/codeby-devops/lesson17[00m$ sudo [7mdocker run -d --name wp \[27m
+[7m  --network wp-net \[27m
+[7m  -p 8080:80 \[27m
+[7m  -e WORDPRESS_DB_HOST=wp-db:3306 \[27m
+[7m  -e WORDPRESS_DB_USER=wpuser \[27m
+[7m  -e WORDPRESS_DB_PASSWORD=wppass \[27m
+[7m  -e WORDPRESS_DB_NAME=wordpress \[27m
+[7m  -v wp-data:/var/www/html \[27m
+[7m  -v $(pwd)/apache/conf.d:/etc/apache2/conf-enabled:ro \[27m
+[7m  wordpress:latest[27m[A[A[A[A[A[A[A[A[A]0;vboxuser@server: ~/codeby-devops/lesson17[01;32mvboxuser@server[00m:[01;34m~/codeby-devops/lesson17[00m$ [C[C[C[C[Cdocker run -d --name wp \
+  --network wp-net \
+  -p 8080:80 \
+  -e WORDPRESS_DB_HOST=wp-db:3306 \
+  -e WORDPRESS_DB_USER=wpuser \
+  -e WORDPRESS_DB_PASSWORD=wppass \
+  -e WORDPRESS_DB_NAME=wordpress \
+  -v wp-data:/var/www/html \
+  -v $(pwd)/apache/conf.d:/etc/apache2/conf-enabled:ro \
+  wordpress:latest
+[?2004l677d5885f3a9f30bfd25ae385ea225b1eea306b27a8aec901429c798fd76004b
+[?2004h]0;vboxuser@server: ~/codeby-devops/lesson17[01;32mvboxuser@server[00m:[01;34m~/codeby-devops/lesson17[00m$ sudo [7mdocker ps[27mdocker ps
+[?2004lCONTAINER ID   IMAGE              COMMAND                  CREATED          STATUS          PORTS                                     NAMES
+677d5885f3a9   wordpress:latest   "docker-entrypoint.s…"   14 seconds ago   Up 13 seconds   0.0.0.0:8080->80/tcp, [::]:8080->80/tcp   wp
+8953fe697417   mysql:8.0          "docker-entrypoint.s…"   33 seconds ago   Up 32 seconds   3306/tcp, 33060/tcp                       wp-db
+[?2004h]0;vboxuser@server: ~/codeby-devops/lesson17[01;32mvboxuser@server[00m:[01;34m~/codeby-devops/lesson17[00m$ sudo [7mdocker network inspect wp-net[27mdocker network inspect wp-net
+[?2004l[
+    {
+        "Name": "wp-net",
+        "Id": "940074108b0bacb7fb81f1dc710ff063d0c9956cf0b99d313b8f885aea2bb676",
+        "Created": "2025-08-23T19:19:09.353727078+03:00",
+        "Scope": "local",
+        "Driver": "bridge",
+        "EnableIPv4": true,
+        "EnableIPv6": false,
+        "IPAM": {
+            "Driver": "default",
+            "Options": {},
+            "Config": [
+                {
+                    "Subnet": "172.18.0.0/16",
+                    "Gateway": "172.18.0.1"
+                }
+            ]
+        },
+        "Internal": false,
+        "Attachable": false,
+        "Ingress": false,
+        "ConfigFrom": {
+            "Network": ""
+        },
+        "ConfigOnly": false,
+        "Containers": {
+            "677d5885f3a9f30bfd25ae385ea225b1eea306b27a8aec901429c798fd76004b": {
+                "Name": "wp",
+                "EndpointID": "0edd495e08090a9b20fb1f13fe4c0690ed450ad4f9ffffb38531d109a47de967",
+                "MacAddress": "c6:4d:32:4e:00:7d",
+                "IPv4Address": "172.18.0.3/16",
+                "IPv6Address": ""
+            },
+            "8953fe697417599be03ce101fb53e0e2cb722af1e82c3aee763fb5863f693202": {
+                "Name": "wp-db",
+                "EndpointID": "0ade3a7d83c9392bb46f9f255594fa7ac5bb73b3c0378c9ef4155feaa83d2a58",
+                "MacAddress": "3a:3e:04:0b:ab:86",
+                "IPv4Address": "172.18.0.2/16",
+                "IPv6Address": ""
+            }
+        },
+        "Options": {},
+        "Labels": {}
+    }
+]
+[?2004h]0;vboxuser@server: ~/codeby-devops/lesson17[01;32mvboxuser@server[00m:[01;34m~/codeby-devops/lesson17[00m$ sudo [7mdocker volume ls[27mdocker volume ls
+[?2004lDRIVER    VOLUME NAME
+local     wp-data
+local     wp-db
+[?2004h]0;vboxuser@server: ~/codeby-devops/lesson17[01;32mvboxuser@server[00m:[01;34m~/codeby-devops/lesson17[00m$ exit
+[?2004lexit
+
+Script done on 2025-08-23 19:21:29+03:00 [COMMAND_EXIT_CODE="0"]
