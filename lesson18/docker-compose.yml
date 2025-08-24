@@ -1,0 +1,67 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: lesson18-mysql
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-u${MYSQL_USER}", "-p${MYSQL_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    image: wordpress:php8.2-apache
+    container_name: lesson18-wordpress
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: ${MYSQL_USER}
+      WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD}
+      WORDPRESS_DB_NAME: ${MYSQL_DATABASE}
+      # Пример доп.настроек wp-config.php:
+      # WORDPRESS_CONFIG_EXTRA: |
+      #   define('WP_MEMORY_LIMIT', '256M');
+    volumes:
+      - ./data/wordpress:/var/www/html
+      # Альтернатива (реже проблемы с обновлениями WP):
+      # - ./data/wordpress/wp-content:/var/www/html/wp-content
+    depends_on:
+      - db
+    networks:
+      - backend
+      - frontend
+
+  proxy:
+    image: nginx:1.27-alpine
+    container_name: lesson18-proxy
+    restart: unless-stopped
+    volumes:
+      - ./proxy/nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "80:80"
+      # Для TLS:
+      # - "443:443"
+      # и добавить ssl-конфиг + сертификаты в proxy/
+    depends_on:
+      - app
+    networks:
+      - frontend
+
+networks:
+  backend:
+    driver: bridge
+  frontend:
+    driver: bridge
