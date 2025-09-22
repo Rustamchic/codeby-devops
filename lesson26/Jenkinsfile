@@ -1,0 +1,74 @@
+pipeline {
+  agent { label 'maven' }  // или any, если нет отдельного агента
+  tools {
+    jdk   'temurin-17'     // настройте в Global Tool Configuration
+    maven 'maven-3.9.9'
+  }
+  options {
+    skipDefaultCheckout(false)
+    timestamps()
+  }
+
+  stages {
+    stage('Prepare') {
+      steps {
+        sh 'java -version'
+        sh 'mvn -v'
+      }
+    }
+
+    stage('Apps (parallel by changes)') {
+      parallel {
+        stage('hello-world') {
+          when { changeset "lesson26/apps/hello-world/**" }
+          stages {
+            stage('Build hello-world') {
+              steps { dir('lesson26/apps/hello-world') { sh 'mvn -B -V -U clean package' } }
+            }
+            stage('Test hello-world') {
+              steps { dir('lesson26/apps/hello-world') { sh 'mvn -B test' } }
+            }
+            stage('Deploy hello-world') {
+              steps { sh 'java -jar lesson26/apps/hello-world/target/*.jar' }
+            }
+          }
+        }
+        stage('hello-jenkins') {
+          when { changeset "lesson26/apps/hello-jenkins/**" }
+          stages {
+            stage('Build hello-jenkins') {
+              steps { dir('lesson26/apps/hello-jenkins') { sh 'mvn -B -V -U clean package' } }
+            }
+            stage('Test hello-jenkins') {
+              steps { dir('lesson26/apps/hello-jenkins') { sh 'mvn -B test' } }
+            }
+            stage('Deploy hello-jenkins') {
+              steps { sh 'java -jar lesson26/apps/hello-jenkins/target/*.jar' }
+            }
+          }
+        }
+        stage('hello-devops') {
+          when { changeset "lesson26/apps/hello-devops/**" }
+          stages {
+            stage('Build hello-devops') {
+              steps { dir('lesson26/apps/hello-devops') { sh 'mvn -B -V -U clean package' } }
+            }
+            stage('Test hello-devops') {
+              steps { dir('lesson26/apps/hello-devops') { sh 'mvn -B test' } }
+            }
+            stage('Deploy hello-devops') {
+              steps { sh 'java -jar lesson26/apps/hello-devops/target/*.jar' }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  post {
+    always {
+      archiveArtifacts artifacts: 'lesson26/apps/**/target/*.jar', fingerprint: true
+      junit 'lesson26/apps/**/target/surefire-reports/*.xml'
+    }
+  }
+}
