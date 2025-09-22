@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "wp-stack.mysql.fullname" . }}
+  labels:
+    {{- include "wp-stack.labels" . | nindent 4 }}
+spec:
+  serviceName: {{ include "wp-stack.mysql.fullname" . }}
+  replicas: {{ .Values.mysql.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "wp-stack.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: mysql
+  template:
+    metadata:
+      labels:
+        {{- include "wp-stack.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: mysql
+    spec:
+      containers:
+        - name: mysql
+          image: "{{ .Values.image.mysql.repository }}:{{ .Values.image.mysql.tag }}"
+          imagePullPolicy: {{ .Values.image.mysql.pullPolicy }}
+          ports:
+            - name: mysql
+              containerPort: 3306
+          envFrom:
+            - configMapRef:
+                name: {{ include "wp-stack.mysql.fullname" . }}-cm
+            - secretRef:
+                name: {{ include "wp-stack.mysql.fullname" . }}-secret
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/mysql
+          resources:
+            {{- toYaml .Values.mysql.resources | nindent 12 }}
+          readinessProbe:
+            exec:
+              command: ["sh","-c","mysqladmin ping -h 127.0.0.1 -u$MYSQL_USER -p$MYSQL_PASSWORD"]
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          livenessProbe:
+            exec:
+              command: ["sh","-c","mysqladmin ping -h 127.0.0.1 -u$MYSQL_USER -p$MYSQL_PASSWORD"]
+            initialDelaySeconds: 30
+            periodSeconds: 10
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: {{ toYaml .Values.mysql.persistence.accessModes | nindent 8 }}
+        resources:
+          requests:
+            storage: {{ .Values.mysql.persistence.size }}
+        {{- if .Values.mysql.persistence.storageClassName }}
+        storageClassName: {{ .Values.mysql.persistence.storageClassName | quote }}
+        {{- end }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "wp-stack.mysql.fullname" . }}
+  labels:
+    {{- include "wp-stack.labels" . | nindent 4 }}
+spec:
+  type: ClusterIP
+  ports:
+    - port: {{ .Values.mysql.service.port }}
+      targetPort: mysql
+      name: mysql
+  selector:
+    {{- include "wp-stack.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: mysql

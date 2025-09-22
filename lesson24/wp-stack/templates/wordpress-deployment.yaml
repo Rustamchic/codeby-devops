@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "wp-stack.wordpress.fullname" . }}
+  labels:
+    {{- include "wp-stack.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.wordpress.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "wp-stack.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: wordpress
+  template:
+    metadata:
+      labels:
+        {{- include "wp-stack.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: wordpress
+    spec:
+      containers:
+        - name: wordpress
+          image: "{{ .Values.image.wordpress.repository }}:{{ .Values.image.wordpress.tag }}"
+          imagePullPolicy: {{ .Values.image.wordpress.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 80
+          envFrom:
+            - configMapRef:
+                name: {{ include "wp-stack.wordpress.fullname" . }}-cm
+            - secretRef:
+                name: {{ include "wp-stack.wordpress.fullname" . }}-secret
+          volumeMounts:
+            {{- if .Values.wordpress.persistence.enabled }}
+            - name: wp-data
+              mountPath: /var/www/html
+            {{- end }}
+          resources:
+            {{- toYaml .Values.wordpress.resources | nindent 12 }}
+          readinessProbe:
+            httpGet: { path: /wp-login.php, port: http }
+            initialDelaySeconds: 20
+            periodSeconds: 10
+          livenessProbe:
+            httpGet: { path: /, port: http }
+            initialDelaySeconds: 60
+            periodSeconds: 10
+      volumes:
+        {{- if .Values.wordpress.persistence.enabled }}
+        - name: wp-data
+          persistentVolumeClaim:
+            claimName: {{ include "wp-stack.wordpress.pvcName" . }}
+        {{- end }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "wp-stack.wordpress.fullname" . }}
+  labels:
+    {{- include "wp-stack.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.wordpress.service.type }}
+  ports:
+    - port: {{ .Values.wordpress.service.port }}
+      targetPort: http
+      name: http
+  selector:
+    {{- include "wp-stack.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: wordpress
