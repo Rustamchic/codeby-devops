@@ -1,0 +1,57 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: diag-sa
+  namespace: wordpress
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: diag-reader
+  namespace: wordpress
+rules:
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: diag-reader-binding
+  namespace: wordpress
+subjects:
+  - kind: ServiceAccount
+    name: diag-sa
+    namespace: wordpress
+roleRef:
+  kind: Role
+  name: diag-reader
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: diag-tools
+  namespace: wordpress
+  labels:
+    app: diag-tools
+spec:
+  serviceAccountName: diag-sa
+  restartPolicy: Never
+  containers:
+    - name: kubectl
+      image: bitnami/kubectl:latest
+      # Команда: один раз вывести найденные поды и "уснуть", чтобы логи были доступны
+      command: ["/bin/sh","-c"]
+      args:
+        - |
+          echo "=== $(date) ===";
+          echo "Ищу поды WordPress (label app=wordpress) в namespace: $POD_NAMESPACE";
+          kubectl get pods -n "$POD_NAMESPACE" -l app=wordpress -o wide || true;
+          echo "Готово. Оставляю контейнер в живых для просмотра логов.";
+          sleep 3600
+      env:
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
