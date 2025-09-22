@@ -1,0 +1,31 @@
+pipeline {
+  agent { label 'maven' }       // билд бежит на постоянном агенте с меткой maven
+  tools {
+    jdk   'temurin-17'          // имя JDK из Manage Jenkins > Global Tool Configuration
+    maven 'maven-3.9.9'         // имя Maven из Tools (включите auto-install)
+  }
+  options { skipDefaultCheckout(true) }
+
+  stages {
+    stage('Checkout') {
+      steps {
+        checkout scm
+      }
+    }
+
+    stage('Build with Maven') {
+      steps {
+        dir('lesson25/sample-app') {
+          sh 'mvn -B -V clean package'
+        }
+      }
+    }
+
+    stage('Archive Artifact') {
+      steps {
+        archiveArtifacts artifacts: 'lesson25/sample-app/target/*.jar', fingerprint: true
+        junit 'lesson25/sample-app/target/surefire-reports/*.xml'
+      }
+    }
+  }
+}
