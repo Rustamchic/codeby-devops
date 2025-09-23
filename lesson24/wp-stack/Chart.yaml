@@ -1,0 +1,8 @@
+cat > Chart.yaml <<'YAML'
+apiVersion: v2
+name: wp-stack
+description: Helm chart for WordPress + MySQL with PV, NetworkPolicy, HPA and Ingress
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
+YAML

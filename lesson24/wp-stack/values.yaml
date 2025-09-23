@@ -1,0 +1,81 @@
+cat > values.yaml <<'YAML'
+# Общие
+fullnameOverride: ""     # можно задать префикс имени вручную
+commonLabels: {}
+
+namespace: ""            # по умолчанию использует текущий ns релиза
+
+image:
+  wordpress:
+    repository: wordpress
+    tag: "latest"        # рекомендуется зафиксировать, например "6.6.1-php8.2-apache"
+    pullPolicy: IfNotPresent
+  mysql:
+    repository: mysql
+    tag: "8.0"
+    pullPolicy: IfNotPresent
+
+wordpress:
+  replicaCount: 1
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "256Mi"
+    limits:
+      cpu: "500m"
+      memory: "512Mi"
+  service:
+    type: ClusterIP
+    port: 80
+  persistence:
+    enabled: true
+    accessModes: ["ReadWriteOnce"]
+    size: 5Gi
+    storageClassName: ""   # оставить пустым для default SC
+  env:
+    extra: {}              # дополнительные НЕсекретные env для WP (map)
+
+mysql:
+  replicaCount: 1
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "256Mi"
+    limits:
+      cpu: "500m"
+      memory: "512Mi"
+  service:
+    port: 3306
+  persistence:
+    enabled: true
+    accessModes: ["ReadWriteOnce"]
+    size: 10Gi
+    storageClassName: ""   # оставить пустым для default SC
+  auth:
+    database: wordpress
+    username: wpuser
+    password: wppass            # НЕ храните секреты в git — переопределяйте через --set или values override
+    rootPassword: rootpass
+
+networkPolicy:
+  enabled: true
+
+hpa:
+  enabled: true
+  minReplicas: 1
+  maxReplicas: 4
+  targetCPUUtilizationPercentage: 60
+
+ingress:
+  enabled: true
+  className: ""                 # например: "nginx" в minikube ingress addon
+  annotations: {}
+  hosts:
+    - host: wp.local
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []                       # пример:
+  #  - secretName: wp-tls
+  #    hosts: [wp.local]
+YAML
