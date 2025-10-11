@@ -1,0 +1,33 @@
+name: terraform
+on:
+  push:
+    branches: [ main ]
+    paths: [ "itog_project/infra/terraform/**" ]
+  pull_request:
+    paths: [ "itog_project/infra/terraform/**" ]
+jobs:
+  tf:
+    runs-on: ubuntu-latest
+    permissions: { contents: read, id-token: write }
+    env:
+      TF_IN_AUTOMATION: true
+      AWS_REGION: eu-central-1
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+        with: { terraform_version: 1.9.5 }
+      - name: Configure AWS (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+      - name: Init
+        working-directory: itog_project/infra/terraform/aws-eks
+        run: terraform init -input=false
+      - name: Plan
+        working-directory: itog_project/infra/terraform/aws-eks
+        run: terraform plan -input=false -out tfplan
+      - name: Apply (auto on main)
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        working-directory: itog_project/infra/terraform/aws-eks
+        run: terraform apply -auto-approve tfplan
