@@ -1,9 +1,11 @@
 name: ci
 on:
   push:
-    branches: [ main ]
-    paths: [ "itog_project/services/", "itog_project/charts/", ".github/**" ]
+    branches: [ main, itog_project ]
+    paths: [ "itog_project/", ".github/" ]
   pull_request:
+  workflow_dispatch:
+
 jobs:
   build-test:
     runs-on: ubuntu-latest
@@ -22,6 +24,7 @@ jobs:
       - name: Test
         working-directory: itog_project/services/api
         run: go test ./...
+
   image:
     needs: build-test
     runs-on: ubuntu-latest
