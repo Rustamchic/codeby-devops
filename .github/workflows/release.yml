@@ -1,0 +1,21 @@
+name: release
+on:
+  push:
+    tags: [ 'v*.*.*' ]
+jobs:
+  helm-oci:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Helm
+        run: curl -fsSL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+      - name: Login to GHCR (OCI)
+        run: echo ${{ secrets.GITHUB_TOKEN }} | helm registry login ghcr.io -u ${{ github.actor }} --password-stdin
+      - name: Package & push chart
+        working-directory: itog_project/charts/api
+        run: |
+          helm package .
+          helm push api-*.tgz oci://ghcr.io/${{ github.repository_owner }}/charts

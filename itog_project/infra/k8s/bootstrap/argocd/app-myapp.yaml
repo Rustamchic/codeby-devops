@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: myapp-api
+  namespace: argocd
+spec:
+  project: default
+  source:
+    chart: api
+    repoURL: oci://ghcr.io/Rustamchic/charts
+    targetRevision: 0.1.0
+    helm:
+      values: |
+        image:
+          repository: ghcr.io/Rustamchic/myapp-api
+          tag: latest
+        service:
+          type: LoadBalancer
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: myapp
+  syncPolicy:
+    automated: { prune: true, selfHeal: true }
